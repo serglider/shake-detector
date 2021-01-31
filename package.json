@@ -1,7 +1,7 @@
 {
-    "name": "shake-monitor",
+    "name": "shake-detector",
     "version": "0.3.0-beta.0",
-    "description": "shake-monitor",
+    "description": "Mobile device shakes detection",
     "keywords": [
         "device shake",
         "device shake detection",
@@ -14,7 +14,7 @@
     "typings": "types",
     "repository": {
         "type": "git",
-        "url": "https://github.com/serglider/shake-monitor.git"
+        "url": "https://github.com/serglider/shake-detector.git"
     },
     "dependencies": {},
     "devDependencies": {

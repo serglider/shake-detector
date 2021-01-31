@@ -1,5 +1,5 @@
-# shake-monitor
-TODO
+# shake-detector
+Mobile device shakes detection
 
 ## Documentation
 TODO
