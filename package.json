@@ -34,7 +34,7 @@
         "dev-build": "rollup -c rollup/dev.config.js -w",
         "dev": "rollup -c rollup/dev.config.js",
         "declarations": "tsc --emitDeclarationOnly",
-        "postversion": "npm run build && npm publish && git push && git push --tags"
+        "postversion": "npm run build && npm publish"
     },
     "files": [
         "dist",
