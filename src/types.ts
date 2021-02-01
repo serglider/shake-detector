@@ -8,10 +8,12 @@ export type MotionEventHandler = (e: DeviceMotionEvent) => void;
 
 export type MotionHandlersList = Collection<MotionEventHandler>;
 
-export type ShakeMonitorOptions = {
-    threshold?: number;
-    frequency?: number;
+export type ShakeDetectorOptions = {
+    threshold: number;
+    frequency: number;
 };
+
+export type UserOptions = Partial<ShakeDetectorOptions>;
 
 export type Acceleration = {
     x: number;

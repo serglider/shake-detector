@@ -1,29 +1,45 @@
+// index.ts
+/**
+ * The library exposes the ```ShakeDetector``` class.
+ * @packageDocumentation
+ * @module ShakeDetector
+ */
+
 import { isFunc, isAcceleration, getDelta } from './utils';
 import MotionMonitor from './MotionMonitor';
-import IShakeMonitor from './interfaces/IShakeMonitor';
-import { ShakeMonitorOptions, ShakeHandler, ShakeHandlersList, StoredAcceleration } from './types';
+import IShakeDetector from './interfaces/IShakeDetector';
+import {
+    ShakeDetectorOptions,
+    UserOptions,
+    ShakeHandler,
+    ShakeHandlersList,
+    StoredAcceleration,
+} from './types';
 
-const defaultOptions = {
-    threshold: 15,
-    frequency: 1000,
-};
-
-export default class ShakeMonitor implements IShakeMonitor {
+export default class ShakeDetector implements IShakeDetector {
+    private static defaultOptions: ShakeDetectorOptions = {
+        threshold: 15,
+        frequency: 1000,
+    };
     private readonly threshold: number;
     private readonly frequency: number;
     private readonly motionMonitor: MotionMonitor;
     private listeners: ShakeHandlersList = [];
+    private lastAcceleration: StoredAcceleration = {};
     private isRunning: boolean = false;
     private lastTime!: number;
-    private lastAcceleration: StoredAcceleration = {};
 
-    constructor(options: ShakeMonitorOptions) {
-        const { threshold, frequency } = Object.assign({}, defaultOptions, options);
+    constructor(options: UserOptions) {
+        const { threshold, frequency } = Object.assign({}, ShakeDetector.defaultOptions, options);
         this.threshold = threshold;
         this.frequency = frequency;
         this.motionMonitor = new MotionMonitor().subscribe(this.onDeviceMotion);
     }
 
+    /**
+     * Adds a handler to the shake event handlers pool
+     * @param listener
+     */
     subscribe(listener: ShakeHandler) {
         if (isFunc(listener)) {
             this.listeners.push(listener);
@@ -31,6 +47,10 @@ export default class ShakeMonitor implements IShakeMonitor {
         return this;
     }
 
+    /**
+     * Removes a handler from the shake event handlers pool
+     * @param listener
+     */
     unsubscribe(listener: ShakeHandler) {
         if (isFunc(listener)) {
             this.listeners = this.listeners.filter(handler => handler !== listener);
@@ -38,15 +58,33 @@ export default class ShakeMonitor implements IShakeMonitor {
         return this;
     }
 
+    /**
+     * IOS (since 12.2) requires a user's permission to listen to the motion events.
+     * Such permission could be obtained only in response to user interaction.
+     *
+     * This method sets a click listener on the provided element (on ```html``` if not provided)
+     * and returns a promise. Once the element clicked, it asks for permission.
+     * The promise will be resolved with a boolean reflecting the user's decision.
+     *
+     * If no such permission needed, the method returns resolved promise.
+     *
+     * @param triggerElement
+     */
+    requestPermission(triggerElement = document.documentElement): Promise<boolean> {
+        return this.motionMonitor.requestPermission(triggerElement);
+    }
+
+    /**
+     * Notifies the detector that permission to listen to the motion events have already been granted.
+     */
     confirmPermissionGranted() {
         this.motionMonitor.confirmPermissionGranted();
         return this;
     }
 
-    requestPermission(triggerElement = document.documentElement): Promise<boolean> {
-        return this.motionMonitor.requestPermission(triggerElement);
-    }
-
+    /**
+     * Starts monitoring the motion event
+     */
     start() {
         if (!this.isRunning) {
             this.isRunning = true;
@@ -56,6 +94,9 @@ export default class ShakeMonitor implements IShakeMonitor {
         return this;
     }
 
+    /**
+     * Stops monitoring the motion event
+     */
     stop() {
         if (this.isRunning) {
             this.isRunning = false;
@@ -65,6 +106,10 @@ export default class ShakeMonitor implements IShakeMonitor {
         return this;
     }
 
+    /**
+     * Notifies all the shake event listeners that the shake event happened
+     * @private
+     */
     private onShake() {
         const currentTime = performance.now();
         if (currentTime - this.lastTime > this.frequency) {
@@ -73,11 +118,19 @@ export default class ShakeMonitor implements IShakeMonitor {
         }
     }
 
+    /**
+     * Resets previously collected data
+     * @private
+     */
     private reset() {
         this.lastTime = performance.now();
         this.lastAcceleration = {};
     }
 
+    /**
+     * Listens to the motion events and tries to detect the shake event.
+     * @param e
+     */
     private onDeviceMotion = (e: DeviceMotionEvent) => {
         if (!isAcceleration(e.accelerationIncludingGravity)) {
             this.stop();
@@ -107,6 +160,13 @@ export default class ShakeMonitor implements IShakeMonitor {
     };
 }
 
+/**
+ * Compares changes in acceleration with the threshold
+ * @param dx change in acceleration on X-axis
+ * @param dy change in acceleration on Y-axis
+ * @param dz change in acceleration on Z-axis
+ * @param tr threshold
+ */
 function isShake(dx: number, dy: number, dz: number, tr: number) {
     return (dx > tr && dy > tr) || (dx > tr && dz > tr) || (dy > tr && dz > tr);
 }

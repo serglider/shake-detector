@@ -3,10 +3,11 @@ export declare type ShakeHandler = () => void;
 export declare type ShakeHandlersList = Collection<ShakeHandler>;
 export declare type MotionEventHandler = (e: DeviceMotionEvent) => void;
 export declare type MotionHandlersList = Collection<MotionEventHandler>;
-export declare type ShakeMonitorOptions = {
-    threshold?: number;
-    frequency?: number;
+export declare type ShakeDetectorOptions = {
+    threshold: number;
+    frequency: number;
 };
+export declare type UserOptions = Partial<ShakeDetectorOptions>;
 export declare type Acceleration = {
     x: number;
     y: number;

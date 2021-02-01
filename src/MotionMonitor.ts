@@ -12,6 +12,10 @@ export default class MotionMonitor implements IMotionMonitor {
         this.isPermissionGranted = !isPermissionRequired();
     }
 
+    /**
+     * Adds a handler from the motion event handlers pool
+     * @param listener
+     */
     subscribe(listener: MotionEventHandler) {
         if (isFunc(listener)) {
             this.listeners.push(listener);
@@ -19,6 +23,10 @@ export default class MotionMonitor implements IMotionMonitor {
         return this;
     }
 
+    /**
+     * Removes a handler from the motion event handlers pool
+     * @param listener
+     */
     unsubscribe(listener: MotionEventHandler) {
         if (isFunc(listener)) {
             this.listeners = this.listeners.filter(handler => handler !== listener);
@@ -26,11 +34,18 @@ export default class MotionMonitor implements IMotionMonitor {
         return this;
     }
 
-    confirmPermissionGranted() {
-        this.isPermissionGranted = true;
-        return this;
-    }
-
+    /**
+     * IOS (since 12.2) requires a user's permission to listen to the motion events.
+     * Such permission could be obtained only in response to user interaction.
+     *
+     * This method sets a click listener on the provided element (on ```html``` if not provided)
+     * and returns a promise. Once the element clicked, it asks for permission.
+     * The promise will be resolved with a boolean reflecting the user's decision.
+     *
+     * If no such permission needed, the method returns resolved promise.
+     *
+     * @param triggerElement
+     */
     requestPermission(triggerElement = document.documentElement): Promise<boolean> {
         if (!this.isSupported) {
             return Promise.resolve(false);
@@ -56,6 +71,17 @@ export default class MotionMonitor implements IMotionMonitor {
         });
     }
 
+    /**
+     * Sets the flag that permission to listen to the motion events have already been granted to true
+     */
+    confirmPermissionGranted() {
+        this.isPermissionGranted = true;
+        return this;
+    }
+
+    /**
+     * Adds device motion listener
+     */
     start() {
         if (this.isSupported && this.isPermissionGranted) {
             window.addEventListener('devicemotion', this.onMotion, false);
@@ -63,6 +89,9 @@ export default class MotionMonitor implements IMotionMonitor {
         return this;
     }
 
+    /**
+     * Removes device motion listener
+     */
     stop() {
         if (this.isSupported && this.isPermissionGranted) {
             window.removeEventListener('devicemotion', this.onMotion, false);
@@ -70,6 +99,10 @@ export default class MotionMonitor implements IMotionMonitor {
         return this;
     }
 
+    /**
+     * Notifies all the motion event listeners that the motion event happened
+     * @private
+     */
     private onMotion = (e: DeviceMotionEvent) => {
         this.listeners.forEach(listener => listener(e));
     };
