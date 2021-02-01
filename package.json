@@ -1,6 +1,6 @@
 {
     "name": "shake-detector",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Mobile device shakes detection",
     "keywords": [
         "device shake",
