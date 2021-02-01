@@ -3,12 +3,6 @@ import MotionMonitor from './MotionMonitor';
 import IShakeMonitor from './interfaces/IShakeMonitor';
 import { ShakeMonitorOptions, ShakeHandler, ShakeHandlersList, StoredAcceleration } from './types';
 
-// npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease [--preid=<prerelease-id>] | from-git]
-// npm version preminor --preid=beta
-// 'npm [-v | --version]' to print npm version
-// 'npm view <pkg> version' to view a package's published version
-// 'npm ls' to inspect current package/dependency versions
-
 const defaultOptions = {
     threshold: 15,
     frequency: 1000,
