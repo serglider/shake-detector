@@ -2,7 +2,7 @@ import { Acceleration, MaybeAcceleration } from './types';
 
 export function isAcceleration(acceleration: MaybeAcceleration): acceleration is Acceleration {
     if (acceleration === null) {
-        return true;
+        return false;
     }
     const { x, y, z } = acceleration;
     return isNumber(x) && isNumber(y) && isNumber(z);
