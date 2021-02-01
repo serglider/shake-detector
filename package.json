@@ -31,8 +31,8 @@
     },
     "scripts": {
         "build": "rollup -c rollup/prod.config.js",
-        "dev-build": "rollup -c rollup/dev.config.js -w",
-        "dev": "rollup -c rollup/dev.config.js",
+        "dev-build": "rollup -c rollup/dev.config.js",
+        "dev": "rollup -c rollup/dev.config.js -w",
         "declarations": "tsc --emitDeclarationOnly",
         "postversion": "npm run build && npm publish"
     },

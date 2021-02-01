@@ -84,7 +84,7 @@ export default class ShakeMonitor implements IShakeMonitor {
         this.lastAcceleration = {};
     }
 
-    private onDeviceMotion(e: DeviceMotionEvent) {
+    private onDeviceMotion = (e: DeviceMotionEvent) => {
         if (!isAcceleration(e.accelerationIncludingGravity)) {
             this.stop();
             return;
@@ -110,7 +110,7 @@ export default class ShakeMonitor implements IShakeMonitor {
         this.lastAcceleration.x = x;
         this.lastAcceleration.y = y;
         this.lastAcceleration.z = z;
-    }
+    };
 }
 
 function isShake(dx: number, dy: number, dz: number, tr: number) {

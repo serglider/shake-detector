@@ -58,7 +58,7 @@ export default class MotionMonitor implements IMotionMonitor {
 
     start() {
         if (this.isSupported && this.isPermissionGranted) {
-            window.removeEventListener('devicemotion', this.onMotion, false);
+            window.addEventListener('devicemotion', this.onMotion, false);
         }
         return this;
     }
