@@ -35,7 +35,9 @@
         "dev-build": "rollup -c rollup/dev.config.js -w",
         "dev": "rollup -c rollup/dev.config.js",
         "declarations": "tsc --emitDeclarationOnly",
-        "postversion": "npm run build && npm publish"
+        "postversion": "npm run build && npm publish",
+        "deploy-patch": "npm version patch",
+        "deploy-minor": "npm version minor"
     },
     "files": [
         "dist",
