@@ -8,9 +8,9 @@
         "device motion"
     ],
     "license": "MIT",
-    "main": "dist/shake-monitor.cjs.js",
-    "module": "dist/shake-monitor.esm.js",
-    "browser": "dist/shake-monitor.umd.js",
+    "main": "dist/shake-detector.cjs.js",
+    "module": "dist/shake-detector.esm.js",
+    "browser": "dist/shake-detector.umd.js",
     "typings": "types",
     "repository": {
         "type": "git",
