@@ -16,6 +16,7 @@ Mobile device shakes detection
 -   [Chaining](#chaining)
 -   [Shake event](#shake-event)
 -   [Documentation](#docs)
+-   [Roadmap](#roadmap)
 -   [License](#license)
 
 <a name="setup"/>
@@ -136,7 +137,12 @@ window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
 
 Please find the full docs [here](https://serglider.github.io/shake-detector/)
 
-<a name="License"></a>
+<a name="roadmap"/>
+
+## Roadmap
+
+-   demo page with configuration options
+-   provide magnitude of the shake for the shake listeners - how energetic the shake was
 
 <a name="license"/>
 
