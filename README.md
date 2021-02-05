@@ -86,8 +86,8 @@ const shakeDetector = new ShakeDetector(options);
 
 |          Option |  Type  | Default |     Measure     | Default                                                                                  |
 | --------------: | :----: | ------: | :-------------: | :--------------------------------------------------------------------------------------- |
-|     `threshold` | number |      15 |       ms        | device acceleration that will be registered as a shake                                   |
-| `debounceDelay` | number |    1000 | m/s<sup>2</sup> | shake won't be registered if this amount of time has not passed after the previous shake |
+|     `threshold` | number |      15 | m/s<sup>2</sup> | device acceleration that will be registered as a shake                                   |
+| `debounceDelay` | number |    1000 |       ms        | shake won't be registered if this amount of time has not passed after the previous shake |
 
 <a name="api"/>
 
