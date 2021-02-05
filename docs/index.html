@@ -73,28 +73,186 @@
 					<h1>shake-detector</h1>
 				</a>
 				<p>Mobile device shakes detection</p>
-				<a href="#setup" id="setup" style="color: inherit; text-decoration: none;">
-					<h2>Setup</h2>
-				</a>
-				<p><code>event-courier</code> can be installed with npm or using a content delivery network URL to embed it on your HTML page</p>
-				<pre><code class="language-bash">npm i shake-detector
+				<ul>
+					<li>  <a href="#setup">Setup</a></li>
+					<li>  <a href="#ios">IOS limitation</a></li>
+					<li>  <a href="#options">Options</a></li>
+					<li>  <a href="#api">API</a></li>
+					<li>  <a href="#chaining">Chaining</a></li>
+					<li>  <a href="#shake-event">Shake event</a></li>
+					<li>  <a href="#docs">Documentation</a></li>
+					<li>  <a href="#roadmap">Roadmap</a></li>
+					<li>  <a href="#license">License</a></li>
+				</ul>
+				<a name="setup"/>
+					<a href="#setup" id="setup" style="color: inherit; text-decoration: none;">
+						<h2>Setup</h2>
+					</a>
+					<a href="#npm" id="npm" style="color: inherit; text-decoration: none;">
+						<h4>NPM</h4>
+					</a>
+					<pre><code class="language-bash">npm i shake-detector
 </code></pre>
-				<p>or</p>
-				<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/shake-detector&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+					<pre><code class="language-js"><span class="hljs-keyword">import</span> ShakeDetector <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;shake-detector&#x27;</span>;
+<span class="hljs-comment">// ...</span>
+<span class="hljs-keyword">const</span> shakeDetector = <span class="hljs-keyword">new</span> ShakeDetector();
 </code></pre>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
-				<p>TODO</p>
-				<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
-					<h2>Documentation</h2>
-				</a>
-				<p>Please find the full docs <a href="https://serglider.github.io/shake-detector/">here</a></p>
-				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h2>License</h2>
-				</a>
-				<p>Copyright © 2021, <a href="https://github.com/serglider">Sergey Chernykh</a>.
-				Released under the <a href="LICENSE">MIT License</a>.</p>
+					<a href="#cdn" id="cdn" style="color: inherit; text-decoration: none;">
+						<h4>CDN</h4>
+					</a>
+					<pre><code class="language-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/shake-detector&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+					<pre><code class="language-js"><span class="hljs-keyword">const</span> shakeDetector = <span class="hljs-keyword">new</span> <span class="hljs-built_in">window</span>.ShakeDetector();
+</code></pre>
+					<a name="ios"/>
+						<a href="#ios-limitation" id="ios-limitation" style="color: inherit; text-decoration: none;">
+							<h2>IOS limitation</h2>
+						</a>
+						<p>IOS (since 12.2) requires a user&#39;s permission to listen to the motion events, and it could be obtained only in response to user interaction. <code>ShakeDetector</code> will do nothing on IOS 12.2+ in case that such permission was not granted.</p>
+						<p>There are two options:</p>
+						<ol>
+							<li>Notify <code>ShakeDetector</code> that your page has the permission</li>
+						</ol>
+						<pre><code class="language-js">shakeDetector.confirmPermissionGranted();
+shakeDetector.start();
+</code></pre>
+						<ol start="2">
+							<li>Request the permission via <code>ShakeDetector</code></li>
+						</ol>
+						<pre><code class="language-js"><span class="hljs-keyword">const</span> requestTrigger = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;requestTrigger&#x27;</span>);
+<span class="hljs-comment">// requestPermission argument is optional</span>
+<span class="hljs-comment">// default is document.documentElement</span>
+shakeDetector.requestPermission(requestTrigger).then(<span class="hljs-function">() =&gt;</span> {
+    shakeDetector.start();
+});
+</code></pre>
+						<p>In this case <code>ShakeDetector</code> will set a one-time click event listener and will request the permission on click.</p>
+						<a name="options"/>
+							<a href="#options" id="options" style="color: inherit; text-decoration: none;">
+								<h2>Options</h2>
+							</a>
+							<pre><code class="language-js"><span class="hljs-keyword">const</span> options = {
+    <span class="hljs-attr">threshold</span>: <span class="hljs-number">8</span>,
+    <span class="hljs-attr">debounceDelay</span>: <span class="hljs-number">500</span>,
+};
+<span class="hljs-keyword">const</span> shakeDetector = <span class="hljs-keyword">new</span> ShakeDetector(options);
+</code></pre>
+							<table>
+								<thead>
+									<tr>
+										<th align="right">Option</th>
+										<th align="center">Type</th>
+										<th align="right">Default</th>
+										<th align="center">Measure</th>
+										<th align="left">Description</th>
+									</tr>
+								</thead>
+								<tbody><tr>
+										<td align="right"><code>threshold</code></td>
+										<td align="center">number</td>
+										<td align="right">15</td>
+										<td align="center">m/s<sup>2</sup></td>
+										<td align="left">device acceleration that will be registered as a shake</td>
+									</tr>
+									<tr>
+										<td align="right"><code>debounceDelay</code></td>
+										<td align="center">number</td>
+										<td align="right">1000</td>
+										<td align="center">ms</td>
+										<td align="left">shake won&#39;t be registered if this amount of time has not passed after the previous shake</td>
+									</tr>
+							</tbody></table>
+							<a name="api"/>
+								<a href="#api" id="api" style="color: inherit; text-decoration: none;">
+									<h2>API</h2>
+								</a>
+								<table>
+									<thead>
+										<tr>
+											<th align="right">Method</th>
+											<th align="center">Arguments</th>
+											<th align="center">Return</th>
+											<th align="left">Description</th>
+										</tr>
+									</thead>
+									<tbody><tr>
+											<td align="right"><code>subscribe</code></td>
+											<td align="center">listener<br>{function}</td>
+											<td align="center"><code>ShakeDetector</code><br>instance</td>
+											<td align="left">Adds a handler to the shake event handlers pool</td>
+										</tr>
+										<tr>
+											<td align="right"><code>unsubscribe</code></td>
+											<td align="center">listener<br>{function}</td>
+											<td align="center"><code>ShakeDetector</code><br>instance</td>
+											<td align="left">Removes a handler from the shake event handlers pool</td>
+										</tr>
+										<tr>
+											<td align="right"><code>start</code></td>
+											<td align="center">{void}</td>
+											<td align="center"><code>ShakeDetector</code><br>instance</td>
+											<td align="left">Starts monitoring the motion event</td>
+										</tr>
+										<tr>
+											<td align="right"><code>stop</code></td>
+											<td align="center">{void}</td>
+											<td align="center"><code>ShakeDetector</code><br>instance</td>
+											<td align="left">Stops monitoring the motion event</td>
+										</tr>
+										<tr>
+											<td align="right"><code>confirmPermissionGranted</code></td>
+											<td align="center">{void}</td>
+											<td align="center"><code>ShakeDetector</code><br>instance</td>
+											<td align="left"><a href="#ios">Notifies the detector that permission to listen to the motion events has already been granted</a></td>
+										</tr>
+										<tr>
+											<td align="right"><code>requestPermission</code></td>
+											<td align="center">triggerElement<br>{HTMLElement}</td>
+											<td align="center">Promise<boolean></td>
+											<td align="left"><a href="#ios">Requests a user&#39;s permission to listen to the motion events</a></td>
+										</tr>
+								</tbody></table>
+								<a name="chaining"/>
+									<a href="#chaining" id="chaining" style="color: inherit; text-decoration: none;">
+										<h2>Chaining</h2>
+									</a>
+									<p>All <code>ShakeDetector</code> methods except <code>requestPermission</code> return its instance for chaining.</p>
+									<pre><code class="language-js"><span class="hljs-keyword">const</span> onShake = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;shake!&#x27;</span>);
+};
+<span class="hljs-keyword">new</span> ShakeDetector().confirmPermissionGranted().subscribe(onShake).start();
+</code></pre>
+									<a name="shake-event"/>
+										<a href="#shake-event" id="shake-event" style="color: inherit; text-decoration: none;">
+											<h2>Shake event</h2>
+										</a>
+										<p>Once shake is detected, <code>ShakeDetector</code> fire an event on <code>window</code>. One can use it instead of the subscription via <code>subscribe</code> method.</p>
+										<pre><code class="language-js"><span class="hljs-keyword">const</span> onShake = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;shake!&#x27;</span>);
+};
+<span class="hljs-keyword">const</span> shakeDetector = <span class="hljs-keyword">new</span> ShakeDetector();
+shakeDetector.start();
+<span class="hljs-built_in">window</span>.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
+</code></pre>
+										<a name="docs"/>
+											<a href="#documentation" id="documentation" style="color: inherit; text-decoration: none;">
+												<h2>Documentation</h2>
+											</a>
+											<p>Please find the full docs <a href="https://serglider.github.io/shake-detector/">here</a></p>
+											<a name="roadmap"/>
+												<a href="#roadmap" id="roadmap" style="color: inherit; text-decoration: none;">
+													<h2>Roadmap</h2>
+												</a>
+												<ul>
+													<li>  demo page with configuration options</li>
+													<li>  provide magnitude of the shake for the shake listeners - how energetic the shake was</li>
+												</ul>
+												<a name="license"/>
+													<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+														<h2>License</h2>
+													</a>
+													<p>Copyright © 2021, <a href="https://github.com/serglider">Sergey Chernykh</a>.
+													Released under the <a href="LICENSE">MIT License</a>.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">

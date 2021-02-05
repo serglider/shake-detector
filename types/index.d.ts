@@ -40,7 +40,7 @@ export default class ShakeDetector implements IShakeDetector {
      */
     requestPermission(triggerElement?: HTMLElement): Promise<boolean>;
     /**
-     * Notifies the detector that permission to listen to the motion events have already been granted.
+     * Notifies the detector that permission to listen to the motion events has already been granted.
      */
     confirmPermissionGranted(): this;
     /**
