@@ -17,12 +17,13 @@ import {
 } from './types';
 
 export default class ShakeDetector implements IShakeDetector {
+    public static SHAKE_EVENT = 'shake-detected';
     private static defaultOptions: ShakeDetectorOptions = {
         threshold: 15,
-        frequency: 1000,
+        debounceDelay: 1000,
     };
     private readonly threshold: number;
-    private readonly frequency: number;
+    private readonly debounceDelay: number;
     private readonly motionMonitor: MotionMonitor;
     private listeners: ShakeHandlersList = [];
     private lastAcceleration: StoredAcceleration = {};
@@ -30,9 +31,13 @@ export default class ShakeDetector implements IShakeDetector {
     private lastTime!: number;
 
     constructor(options: UserOptions) {
-        const { threshold, frequency } = Object.assign({}, ShakeDetector.defaultOptions, options);
+        const { threshold, debounceDelay } = Object.assign(
+            {},
+            ShakeDetector.defaultOptions,
+            options
+        );
         this.threshold = threshold;
-        this.frequency = frequency;
+        this.debounceDelay = debounceDelay;
         this.motionMonitor = new MotionMonitor().subscribe(this.onDeviceMotion);
     }
 
@@ -112,7 +117,8 @@ export default class ShakeDetector implements IShakeDetector {
      */
     private onShake() {
         const currentTime = performance.now();
-        if (currentTime - this.lastTime > this.frequency) {
+        if (currentTime - this.lastTime > this.debounceDelay) {
+            emitShakeEvent();
             this.listeners.forEach(listener => listener());
             this.lastTime = currentTime;
         }
@@ -158,6 +164,14 @@ export default class ShakeDetector implements IShakeDetector {
         this.lastAcceleration.y = y;
         this.lastAcceleration.z = z;
     };
+}
+
+/**
+ * Fires the shake event on window
+ */
+function emitShakeEvent() {
+    const event = new CustomEvent(ShakeDetector.SHAKE_EVENT);
+    window.dispatchEvent(event);
 }
 
 /**

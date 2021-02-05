@@ -6,9 +6,10 @@
 import IShakeDetector from './interfaces/IShakeDetector';
 import { UserOptions, ShakeHandler } from './types';
 export default class ShakeDetector implements IShakeDetector {
+    static SHAKE_EVENT: string;
     private static defaultOptions;
     private readonly threshold;
-    private readonly frequency;
+    private readonly debounceDelay;
     private readonly motionMonitor;
     private listeners;
     private lastAcceleration;

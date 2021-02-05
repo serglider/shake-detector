@@ -10,7 +10,7 @@ export type MotionHandlersList = Collection<MotionEventHandler>;
 
 export type ShakeDetectorOptions = {
     threshold: number;
-    frequency: number;
+    debounceDelay: number;
 };
 
 export type UserOptions = Partial<ShakeDetectorOptions>;
