@@ -13,8 +13,8 @@ Mobile device shakes detection
 -   [IOS limitation](#ios)
 -   [Options](#options)
 -   [API](#api)
--   [Shake event](#shake-event)
 -   [Chaining](#chaining)
+-   [Shake event](#shake-event)
 -   [Documentation](#docs)
 -   [License](#license)
 
@@ -84,7 +84,7 @@ const options = {
 const shakeDetector = new ShakeDetector(options);
 ```
 
-|          Option |  Type  | Default |     Measure     | Default                                                                                  |
+|          Option |  Type  | Default |     Measure     | Description                                                                              |
 | --------------: | :----: | ------: | :-------------: | :--------------------------------------------------------------------------------------- |
 |     `threshold` | number |      15 | m/s<sup>2</sup> | device acceleration that will be registered as a shake                                   |
 | `debounceDelay` | number |    1000 |       ms        | shake won't be registered if this amount of time has not passed after the previous shake |
@@ -93,32 +93,14 @@ const shakeDetector = new ShakeDetector(options);
 
 ## API
 
-`subscribe` todo (see also Shake event section)
-
-`unsubscribe` todo
-
-`start` todo
-
-`stop` todo
-
-`confirmPermissionGranted` is a foo
-
-`requestPermission` is a foo
-
-<a name="shake-event"/>
-
-## Shake event
-
-Once shake is detected, `ShakeDetector` fire an event on `window`.
-
-```js
-const onShake = () => {
-    console.log('shake!');
-};
-const shakeDetector = new ShakeDetector();
-shakeDetector.start();
-window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
-```
+|                     Method |            Arguments            |           Return            | Description                                                                                           |
+| -------------------------: | :-----------------------------: | :-------------------------: | :---------------------------------------------------------------------------------------------------- |
+|                `subscribe` |     listener<br>{function}      | `ShakeDetector`<br>instance | Adds a handler to the shake event handlers pool                                                       |
+|              `unsubscribe` |     listener<br>{function}      | `ShakeDetector`<br>instance | Removes a handler from the shake event handlers pool                                                  |
+|                    `start` |             {void}              | `ShakeDetector`<br>instance | Starts monitoring the motion event                                                                    |
+|                     `stop` |             {void}              | `ShakeDetector`<br>instance | Stops monitoring the motion event                                                                     |
+| `confirmPermissionGranted` |             {void}              | `ShakeDetector`<br>instance | [Notifies the detector that permission to listen to the motion events has already been granted](#ios) |
+|        `requestPermission` | triggerElement<br>{HTMLElement} |      Promise<boolean>       | [Requests a user's permission to listen to the motion events](#ios)                                   |
 
 <a name="chaining"/>
 
@@ -131,6 +113,21 @@ const onShake = () => {
     console.log('shake!');
 };
 new ShakeDetector().confirmPermissionGranted().subscribe(onShake).start();
+```
+
+<a name="shake-event"/>
+
+## Shake event
+
+Once shake is detected, `ShakeDetector` fire an event on `window`. One can use it instead of the subscription via `subscribe` method.
+
+```js
+const onShake = () => {
+    console.log('shake!');
+};
+const shakeDetector = new ShakeDetector();
+shakeDetector.start();
+window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
 ```
 
 <a name="docs"/>
