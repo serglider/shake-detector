@@ -1,4 +1,4 @@
-import { Acceleration, MaybeAcceleration } from './types';
+import type { Acceleration, MaybeAcceleration } from './types';
 
 export function isAcceleration(acceleration: MaybeAcceleration): acceleration is Acceleration {
     if (acceleration === null) {

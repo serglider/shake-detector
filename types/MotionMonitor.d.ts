@@ -1,4 +1,4 @@
-import { MotionEventHandler } from './types';
+import type { MotionEventHandler } from './types';
 import IMotionMonitor from './interfaces/IMotionMonitor';
 export default class MotionMonitor implements IMotionMonitor {
     private readonly isSupported;

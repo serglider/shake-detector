@@ -1,5 +1,5 @@
 import { isDeviceMotionSupported, isFunc, isPermissionRequired } from './utils';
-import { MotionEventHandler, MotionHandlersList } from './types';
+import type { MotionEventHandler, MotionHandlersList } from './types';
 import IMotionMonitor from './interfaces/IMotionMonitor';
 
 export default class MotionMonitor implements IMotionMonitor {

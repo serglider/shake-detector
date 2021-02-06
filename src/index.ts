@@ -8,7 +8,7 @@
 import { isFunc, isAcceleration, getDelta } from './utils';
 import MotionMonitor from './MotionMonitor';
 import IShakeDetector from './interfaces/IShakeDetector';
-import {
+import type {
     ShakeDetectorOptions,
     UserOptions,
     ShakeHandler,

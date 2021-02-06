@@ -1,4 +1,4 @@
-import { MotionEventHandler } from '../types';
+import type { MotionEventHandler } from '../types';
 
 export default interface IMotionMonitor {
     start: () => IMotionMonitor;

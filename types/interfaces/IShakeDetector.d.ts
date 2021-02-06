@@ -1,4 +1,4 @@
-import { ShakeHandler } from '../types';
+import type { ShakeHandler } from '../types';
 export default interface IShakeDetector {
     start: () => IShakeDetector;
     stop: () => IShakeDetector;
