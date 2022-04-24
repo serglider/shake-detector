@@ -9,7 +9,10 @@ export default class MotionMonitor implements IMotionMonitor {
 
     constructor() {
         this.isSupported = isDeviceMotionSupported();
-        this.isPermissionGranted = !isPermissionRequired();
+        if (!this.isSupported) {
+            console.warn('DeviceMotionEvent event is not supported in your environment');
+        }
+        this.isPermissionGranted = this.isSupported && !isPermissionRequired();
     }
 
     /**
